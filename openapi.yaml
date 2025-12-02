@@ -1,0 +1,123 @@
+openapi: 3.1.0
+info:
+  title: IMG Upload API
+  version: 1.0.0
+  description: Image upload API with Hono.js, Postgres, Prisma, and AWS S3 Bucket
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/@me:
+    get:
+      summary: Get current user's all files
+      description: Return all files that belong to the authenticated user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: List of the user's all files
+          content:
+            application/json:
+              schema:
+                type: array
+        "401":
+          description: Unauthorized
+
+  /api/auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                pass:
+                  type: string
+      responses:
+        "200":
+          description: Login success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  token:
+                    type: string
+                  expiration:
+                    type: integer
+        "400":
+          description: User not found
+        "401":
+          description: Wrong password
+
+  /api/auth/register:
+    post:
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  pass:
+                    type: string
+      responses:
+        "200":
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  passwordHash:
+                    type: string
+        "400":
+          description: User already exists
+
+  /api/fs:
+    post:
+      summary: Upload file to S3
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Upload successful
+          content:
+            text/plain:
+              schema:
+                type: string
+        "400":
+          description: No file uploaded
+        "401":
+          description: Unauthorized
