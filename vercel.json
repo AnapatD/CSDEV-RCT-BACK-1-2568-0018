@@ -1,8 +1,0 @@
-{
-  "functions": {
-    "*": {
-      "includeFiles": "dist/openapi.yaml",
-      "runtime": "nodejs20.x"
-    }
-  }
-}

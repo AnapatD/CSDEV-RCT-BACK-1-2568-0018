@@ -158,8 +158,6 @@ app.get('/showdb', async (c) => {
   return c.json({ user, file });
 })
 
-app.get('/openapi.yaml', serveStatic({ path: '/openapi.yaml' }));
-
 app.get('/docs', Scalar({
   theme: 'kepler',
   url: '/openapi.yaml'
