@@ -30,6 +30,10 @@ const s3 = new S3Client({
   region: BUCKET_REGION
 });
 
+app.get('/', (c) => {
+  c.status(200);
+  return c.text('CSDEV-RCT-BACK-1-2568-0018\nAPI is up and running. See https://imgupload-csdev-quest.vercel.app/docs for the documentation.')
+})
 app.post('/api/auth/register', async (c) => {
   const { name, pass } = await c.req.json();
   var userExist = await prisma.user.findUnique({ where: { name: name } });
