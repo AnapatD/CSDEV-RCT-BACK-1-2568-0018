@@ -22,7 +22,7 @@ model User {
 
 model File {
   id Int @id @default(autoincrement())
-  fileName String
+  fileName String @unique
   s3URL String
   fileSize Int
   uploadDate DateTime @default(now())

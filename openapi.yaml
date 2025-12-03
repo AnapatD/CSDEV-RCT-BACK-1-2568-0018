@@ -4,6 +4,13 @@ info:
   version: 1.0.0
   description: Image upload API with Hono.js, Postgres, Prisma, and AWS S3 Bucket
 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 servers:
   - url: http://localhost:3000
 
@@ -121,3 +128,31 @@ paths:
           description: No file uploaded
         "401":
           description: Unauthorized
+
+  /api/fs/{path}:
+    get:
+      summary: Get uploaded image
+      description: Get an image that belongs to the authenticated user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+          description: File name of the image.
+      responses:
+        "200":
+          description: The requested image file.
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        "401":
+          description: Unauthorized - Invalid or missing token.
+        "404":
+          description: File not found.
+        "500":
+          description: Server error.
