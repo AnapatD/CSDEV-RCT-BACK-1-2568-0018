@@ -12,7 +12,7 @@ components:
       bearerFormat: JWT
 
 servers:
-  - url: http://localhost:3000
+  - url: https://imgupload-csdev-quest.vercel.app
 
 paths:
   /api/@me:
