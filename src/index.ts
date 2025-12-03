@@ -73,18 +73,9 @@ app.get('/api/@me', auth, async (c) => {
   const name = c.get('user').name;
   const list = await prisma.user.findUnique({
     where: { name },
-    select: {
-      name: true,
-      files: {
-        select: {
-          fileName: true,
-          fileSize: true,
-          uploadDate: true
-        }
-      }
-    },
+    include: { files: true },
   })
-  return c.json(list);
+  return c.json(list?.files);
 })
 
 app.post('/api/fs', auth, async (c) => {
@@ -126,30 +117,6 @@ app.post('/api/fs', auth, async (c) => {
   })
   c.status(200);
   return c.text("Upload Success.");
-})
-
-app.get('/api/fs/:path', auth, async (c) => {
-  const path = c.req.param('path');
-  const file = await prisma.file.findUnique({
-    where: {
-      fileName: path
-    },
-    include: {
-      user: true
-    }
-  })
-  const fileOwner = file?.user.name;
-  if (!file || c.get('user').name !== fileOwner) {
-    c.status(404);
-    return c.text("File not found");
-  }
-
-  const response = await fetch(file.s3URL);
-  if (!response) {
-    c.status(500);
-    return c.text("Server Error.");
-  }
-  return new Response(response.body)
 })
 
 app.get('/showdb', async (c) => {
