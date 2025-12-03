@@ -4,8 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "postinstall": "prisma generate"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.940.0",
