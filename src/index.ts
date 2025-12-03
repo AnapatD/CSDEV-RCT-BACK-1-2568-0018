@@ -46,12 +46,12 @@ app.post('/api/auth/register', async (c) => {
 app.post('/api/auth/login', async (c) => {
   const { name, pass } = await c.req.json();
   const user = await prisma.user.findUnique({ where: { name: name } });
-  
+
   if (!user) {
     c.status(400);
     return c.text("User not found");
   }
-  
+
   try {
     const verify = await argon2.verify(user.passwordHash, pass);
     if (!verify) {
